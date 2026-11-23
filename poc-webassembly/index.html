@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>POC WebAssembly</title>
+  <title>WebAssembly POC</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; text-align: center; }
     input, button { padding: 8px; margin: 5px; font-size: 16px; }
   </style>
 </head>
 <body>
-  <h2>POC WebAssembly (Wasm) ⚡</h2>
-  <p>Suma ejecutada en código binario (.wasm):</p>
+  <h2>WebAssembly (Wasm) POC ⚡</h2>
+  <p>Addition executed inside a binary module (.wasm):</p>
 
   <input type="number" id="a" value="10"> +
   <input type="number" id="b" value="25">
   <br>
-  <button onclick="sumar()">Sumar con Wasm</button>
+  <button onclick="calculateSum()">Add with Wasm</button>
 
-  <h3>Resultado: <span id="resultado">-</span></h3>
+  <h3>Result: <span id="result">-</span></h3>
 
   <script>
-    // Módulo binario WebAssembly (.wasm) que exporta la función: add(a, b) => a + b
+    // WebAssembly binary module (.wasm) exporting: add(a, b) => a + b
     const wasmBytes = new Uint8Array([
       0x00,0x61,0x73,0x6d, 0x01,0x00,0x00,0x00,
       0x01,0x07,0x01,0x60, 0x02,0x7f,0x7f,0x01,0x7f,
@@ -32,13 +32,13 @@
 
     WebAssembly.instantiate(wasmBytes).then(({ instance }) => {
       addWasm = instance.exports.add;
-      console.log("✅ Módulo WebAssembly cargado correctamente");
+      console.log("✅ WebAssembly module loaded successfully");
     });
 
-    function sumar() {
+    function calculateSum() {
       const a = Number(document.getElementById('a').value);
       const b = Number(document.getElementById('b').value);
-      document.getElementById('resultado').textContent = addWasm(a, b);
+      document.getElementById('result').textContent = addWasm(a, b);
     }
   </script>
 </body>

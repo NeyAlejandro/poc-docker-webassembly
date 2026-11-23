@@ -1,8 +1,8 @@
 # Docker & WebAssembly (Wasm) - POCs
 
-Repositorio con la consulta teórica y dos pruebas de concepto mínimas para exposición.
+Repository containing the theoretical research and two minimal Proofs of Concept (POCs) for presentation.
 
-**Integrantes:**
+**Team Members:**
 - Alejandro Flores
 - Bryan Flores
 - Marcos Burga
@@ -11,42 +11,42 @@ Repositorio con la consulta teórica y dos pruebas de concepto mínimas para exp
 
 ## 1. Docker 🐳
 
-- **What is it? (¿Qué es?)**
-  Una plataforma para empaquetar y ejecutar aplicaciones con todas sus dependencias dentro de contenedores ligeros y portables.
-- **How does it work? (¿Cómo funciona?)**
-  Usa el kernel del sistema operativo (Linux Namespaces y cgroups) para aislar procesos sin necesidad de levantar una máquina virtual completa.
-- **Where can we use it? (¿Dónde usarlo?)**
-  En microservicios, despliegues en la nube (AWS, GCP, Azure), pruebas de CI/CD y para estandarizar entornos de desarrollo.
-- **Who is implementing it? (¿Quién lo implementa?)**
-  Netflix, Spotify, Uber, PayPal, Shopify y miles de empresas.
-- **Who created it? (¿Quién lo creó?)**
-  **Solomon Hykes** en **2013** (dentro de la empresa dotCloud, hoy Docker Inc.).
+- **What is it?**
+  An open-source platform for packaging, shipping, and running applications along with all their dependencies inside lightweight, portable containers.
+- **How does it work?**
+  It uses the host operating system's kernel (Linux Namespaces and cgroups) to isolate processes and resources without needing a heavy virtual machine.
+- **Where can we use it?**
+  In microservices architectures, cloud deployments (AWS, GCP, Azure), CI/CD pipelines, and for standardizing local development environments.
+- **Who is implementing it?**
+  Netflix, Spotify, Uber, PayPal, Shopify, and thousands of tech companies worldwide.
+- **Who created it?**
+  **Solomon Hykes** in **2013** (originally as an internal project at dotCloud, now Docker, Inc.).
 
-### Cómo ejecutar la POC de Docker (`poc-docker/`)
+### How to run the Docker POC (`poc-docker/`)
 ```bash
 cd poc-docker
 docker build -t poc-docker .
-docker run -d -p 3000:3000 --name mi-contenedor poc-docker
+docker run -d -p 3000:3000 --name my-container poc-docker
 ```
-- Abrir en el navegador: **http://localhost:3000**
-- Para detenerlo: `docker stop mi-contenedor && docker rm mi-contenedor`
+- Open in your browser: **http://localhost:3000**
+- To stop and remove it: `docker stop my-container && docker rm my-container`
 
 ---
 
 ## 2. WebAssembly (Wasm) ⚡
 
-- **What is it? (¿Qué es?)**
-  Un formato de código binario (`.wasm`) que permite ejecutar código de lenguajes como C, C++ o Rust en el navegador a velocidad casi nativa.
-- **How does it work? (¿Cómo funciona?)**
-  El código fuente se compila a bytecode binario `.wasm` y el motor del navegador lo ejecuta dentro de una máquina virtual segura (*sandbox*).
-- **Where can we use it? (¿Dónde usarlo?)**
-  En aplicaciones web pesadas (edición de video/3D, videojuegos en navegador), criptografía y Edge Computing (Cloudflare Workers).
-- **Who is implementing it? (¿Quién lo implementa?)**
-  **Figma**, **Adobe Photoshop Web**, **AutoCAD Web**, **Google Earth** y todos los navegadores modernos (Chrome, Firefox, Safari, Edge).
-- **Who created it? (¿Quién lo creó?)**
-  **Luke Wagner** (Mozilla) en **2015**, en colaboración con **Google, Microsoft y Apple** (estándar oficial del **W3C**).
+- **What is it?**
+  A low-level binary instruction format (`.wasm`) that allows code written in languages like C, C++, or Rust to run in web browsers at near-native speed.
+- **How does it work?**
+  Source code is compiled into `.wasm` binary bytecode, which the browser's engine validates and executes inside a secure, sandboxed virtual stack machine.
+- **Where can we use it?**
+  In performance-heavy web applications (video/3D editing, browser games), cryptography, serverless functions, and Edge Computing (Cloudflare Workers).
+- **Who is implementing it?**
+  **Figma**, **Adobe Photoshop Web**, **AutoCAD Web**, **Google Earth**, and all major browsers (Chrome, Firefox, Safari, Edge).
+- **Who created it?**
+  **Luke Wagner** (Mozilla) in **2015**, in collaboration with **Google, Microsoft, and Apple** (now an official **W3C** standard).
 
-### Cómo ejecutar la POC de WebAssembly (`poc-webassembly/`)
-1. Abre el archivo `poc-webassembly/index.html` con doble clic en cualquier navegador.
-2. Ingresa dos números y presiona **"Sumar con Wasm"**.
-3. Abre la consola (`F12`) para ver el mensaje: `✅ Módulo WebAssembly cargado correctamente`.
+### How to run the WebAssembly POC (`poc-webassembly/`)
+1. Double-click `poc-webassembly/index.html` to open it in any web browser.
+2. Enter two numbers and click **"Add with Wasm"**.
+3. Open the browser console (`F12`) to verify: `✅ WebAssembly module loaded successfully`.
