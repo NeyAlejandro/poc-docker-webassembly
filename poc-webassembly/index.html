@@ -1,258 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POC WebAssembly (Wasm)</title>
+  <meta charset="UTF-8">
+  <title>POC WebAssembly</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --accent: #a855f7;
-      --accent-hover: #9333ea;
-      --success: #22c55e;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --border: #334155;
-      --input-bg: #0f172a;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      max-width: 520px;
-      width: 100%;
-      padding: 2rem;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(168, 85, 247, 0.15);
-      color: #c084fc;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 0.3rem 0.75rem;
-      border-radius: 9999px;
-    }
-    .status {
-      font-size: 0.8rem;
-      color: var(--success);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--success);
-    }
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-    p.subtitle {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.4;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-    label {
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-    input[type="number"] {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.7rem 0.85rem;
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    input[type="number"]:focus {
-      border-color: var(--accent);
-    }
-    button {
-      width: 100%;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0.8rem 1rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-      margin-bottom: 1.5rem;
-    }
-    button:hover {
-      background: var(--accent-hover);
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .result-box {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .result-label {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .result-value {
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #c084fc;
-    }
-    .wat-note {
-      margin-top: 1.25rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-      background: rgba(15, 23, 42, 0.55);
-      border: 1px dashed var(--border);
-      border-radius: 6px;
-      padding: 0.75rem;
-      font-family: 'Consolas', 'Courier New', monospace;
-    }
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; text-align: center; }
+    input, button { padding: 8px; margin: 5px; font-size: 16px; }
   </style>
 </head>
 <body>
-  <main class="card">
-    <div class="header">
-      <span class="badge">WebAssembly Binary</span>
-      <span class="status" id="wasm-status">
-        <span class="status-dot"></span> Cargando Wasm...
-      </span>
-    </div>
-    <h1>Calculadora Natively-Compiled</h1>
-    <p class="subtitle">
-      Este ejemplo instancia un binario real <code>.wasm</code> desde un <code>Uint8Array</code> y ejecuta la función exportada <code>add(a, b)</code> de 32 bits.
-    </p>
+  <h2>POC WebAssembly (Wasm) ⚡</h2>
+  <p>Suma ejecutada en código binario (.wasm):</p>
 
-    <div class="form-grid">
-      <div class="field">
-        <label for="num-a">Número A (i32)</label>
-        <input type="number" id="num-a" value="42" step="1" />
-      </div>
-      <div class="field">
-        <label for="num-b">Número B (i32)</label>
-        <input type="number" id="num-b" value="58" step="1" />
-      </div>
-    </div>
+  <input type="number" id="a" value="10"> +
+  <input type="number" id="b" value="25">
+  <br>
+  <button onclick="sumar()">Sumar con Wasm</button>
 
-    <button id="calc-btn" disabled>Ejecutar add(a, b) en WebAssembly</button>
-
-    <div class="result-box">
-      <span class="result-label">Resultado devuelto por Wasm:</span>
-      <span class="result-value" id="result-output">—</span>
-    </div>
-
-    <div class="wat-note">
-      (module<br/>
-      &nbsp;&nbsp;(func (export "add") (param i32 i32) (result i32)<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;local.get 0<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;local.get 1<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;i32.add))
-    </div>
-  </main>
+  <h3>Resultado: <span id="resultado">-</span></h3>
 
   <script>
-    // Bytecode binario WebAssembly compilado desde el módulo WAT superior:
-    // Exporta: add(i32, i32) -> i32
+    // Módulo binario WebAssembly (.wasm) que exporta la función: add(a, b) => a + b
     const wasmBytes = new Uint8Array([
-      0x00, 0x61, 0x73, 0x6d, // Magic number: \0asm
-      0x01, 0x00, 0x00, 0x00, // Versión: 1
-      0x01, 0x07, 0x01,       // Type section: 1 tipo
-      0x60, 0x02, 0x7f, 0x7f, // func (param i32 i32)
-      0x01, 0x7f,             // (result i32)
-      0x03, 0x02, 0x01, 0x00, // Function section: 1 función usando tipo 0
-      0x07, 0x07, 0x01,       // Export section: 1 exportación
-      0x03, 0x61, 0x64, 0x64, // nombre "add"
-      0x00, 0x00,             // func índice 0
-      0x0a, 0x09, 0x01,       // Code section: 1 cuerpo de función
-      0x07, 0x00,             // tamaño 7 bytes, 0 variables locales
-      0x20, 0x00,             // local.get 0
-      0x20, 0x01,             // local.get 1
-      0x6a,                   // i32.add
-      0x0b                    // end
+      0x00,0x61,0x73,0x6d, 0x01,0x00,0x00,0x00,
+      0x01,0x07,0x01,0x60, 0x02,0x7f,0x7f,0x01,0x7f,
+      0x03,0x02,0x01,0x00, 0x07,0x07,0x01,0x03,0x61,0x64,0x64,0x00,0x00,
+      0x0a,0x09,0x01,0x07, 0x00,0x20,0x00,0x20,0x01,0x6a,0x0b
     ]);
 
-    let wasmAdd = null;
+    let addWasm;
 
-    async function initWasm() {
-      const statusEl = document.getElementById('wasm-status');
-      const calcBtn = document.getElementById('calc-btn');
-      const resultOutput = document.getElementById('result-output');
+    WebAssembly.instantiate(wasmBytes).then(({ instance }) => {
+      addWasm = instance.exports.add;
+      console.log("✅ Módulo WebAssembly cargado correctamente");
+    });
 
-      try {
-        const { instance } = await WebAssembly.instantiate(wasmBytes);
-        wasmAdd = instance.exports.add;
-
-        console.log('[POC-WebAssembly] Módulo WebAssembly cargado e instanciado correctamente.', instance.exports);
-        statusEl.innerHTML = '<span class="status-dot"></span> Módulo Wasm Listo';
-        calcBtn.disabled = false;
-
-        // Cálculo inicial de demostración
-        runCalculation();
-      } catch (err) {
-        console.error('[POC-WebAssembly] Error al instanciar el módulo Wasm:', err);
-        statusEl.textContent = 'Error al cargar Wasm';
-        statusEl.style.color = '#ef4444';
-        resultOutput.textContent = 'Error';
-      }
+    function sumar() {
+      const a = Number(document.getElementById('a').value);
+      const b = Number(document.getElementById('b').value);
+      document.getElementById('resultado').textContent = addWasm(a, b);
     }
-
-    function runCalculation() {
-      if (!wasmAdd) return;
-      const a = parseInt(document.getElementById('num-a').value, 10) || 0;
-      const b = parseInt(document.getElementById('num-b').value, 10) || 0;
-      const sum = wasmAdd(a, b);
-      document.getElementById('result-output').textContent = sum;
-      console.log(`[POC-WebAssembly] wasm.add(${a}, ${b}) = ${sum}`);
-    }
-
-    document.getElementById('calc-btn').addEventListener('click', runCalculation);
-    initWasm();
   </script>
 </body>
 </html>
