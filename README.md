@@ -2,6 +2,11 @@
 
 Repositorio con la consulta teórica y dos pruebas de concepto mínimas para exposición.
 
+**Integrantes:**
+- Alejandro Flores
+- Bryan Flores
+- Marcos Burga
+
 ---
 
 ## 1. Docker 🐳
